@@ -1,0 +1,4 @@
+address,cityName,emailId,firstName,lastName,phoneNumber,stateName,zipCode
+Address,America,nandu@gmail.com,nandu,Poorna,+23-1234567890,Germany,120012
+Address,New York City,lali@gmail.com,Lali,Lakshmi,+12-9874563210,New York,123456
+Address,Los Angeles,satya@gmail.com,Satya,Nadela,+11-5463217890,California,120546
