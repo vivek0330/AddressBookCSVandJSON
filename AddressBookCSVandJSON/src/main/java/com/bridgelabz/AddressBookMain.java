@@ -7,11 +7,19 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
 public class AddressBookMain {
+
     public static List<Contact> contactList = new ArrayList<>();
     public static Map<String, Contact> addressMap = new HashMap<>();
     static Scanner sc = new Scanner(System.in);
-    public AddressBookCSV addressFileObj;
+    public AddressBookJSON addressJsonObj;
 
     public List<Contact> getContactList() {
         return contactList;
@@ -22,7 +30,7 @@ public class AddressBookMain {
     }
 
     public void addContact(String addBookName) {
-        addressFileObj = new AddressBookCSV(addBookName + ".txt");
+        addressJsonObj = new AddressBookJSON(addBookName + ".txt");
         System.out.println("Enter the number of persons whose contact details are to be added: ");
         int noOfPersons = sc.nextInt();
         sc.nextLine();
@@ -46,7 +54,7 @@ public class AddressBookMain {
             String ei = sc.nextLine();
             Contact contactObj = new Contact(fn, ln, ei, c, add, zc, s, pn);
             contactList.add(contactObj);
-            addressFileObj.writeContactDetailsInAFile(contactList);
+            addressJsonObj.writeContactDetailsInAFile(contactList);
             addressMap.put(contactObj.getFirstName(), contactObj);
         }
     }
@@ -54,7 +62,7 @@ public class AddressBookMain {
     public void editContact() {
         int x;
         boolean flag = true;
-        contactList = addressFileObj.readAddressBookFromAFile();
+        contactList = addressJsonObj.readAddressBookFromAFile();
         System.out.println("Do you want to edit contact details (Y/N-y/n): ");
         char ch = sc.next().charAt(0);
         sc.nextLine();
@@ -89,7 +97,7 @@ public class AddressBookMain {
                     Contact contactObj = new Contact(fn, ln, ei, c, add, zc, s, pn);
                     contactList.set(i, contactObj);
                     System.out.println("Contact details of " + editN + " edited successfully! Updated Details are: ");
-                    addressFileObj.writeContactDetailsInAFile(contactList);
+                    addressJsonObj.writeContactDetailsInAFile(contactList);
                     x = 1;
                     flag = false;
                     break;
@@ -103,7 +111,7 @@ public class AddressBookMain {
     public void removeContact() {
         boolean flag = true;
         int x;
-        contactList = addressFileObj.readAddressBookFromAFile();
+        contactList = addressJsonObj.readAddressBookFromAFile();
         System.out.println("Do you want to remove contact details (Y/N-y/n): ");
         char ch = sc.next().charAt(0);
         sc.nextLine();
@@ -119,7 +127,7 @@ public class AddressBookMain {
                 if ((ch == 'Y' || ch == 'y') && l.getFirstName().equals(removeN)) {
                     contactList.remove(x);
                     System.out.println("Contact Details removed successfully!! Updated Details are: ");
-                    addressFileObj.writeContactDetailsInAFile(contactList);
+                    addressJsonObj.writeContactDetailsInAFile(contactList);
                     x = 1;
                     flag = false;
                     break;
@@ -135,7 +143,7 @@ public class AddressBookMain {
         System.out.println("Enter first and last name to check for repeatition :");
         String firstName = sc.nextLine();
         String lastName = sc.nextLine();
-        contactList = addressFileObj.readAddressBookFromAFile();
+        contactList = addressJsonObj.readAddressBookFromAFile();
         counter = contactList.stream().filter((conObj) -> (conObj.getFirstName() + " " + conObj.getLastName()).equals(firstName + " " + lastName)).count();
         if (counter == 0)
             System.out.println("Duplicate entry does not exist.");
@@ -144,14 +152,14 @@ public class AddressBookMain {
     }
 
     public void sortContactsByName() {
-        contactList = addressFileObj.readAddressBookFromAFile();
+        contactList = addressJsonObj.readAddressBookFromAFile();
         contactList = contactList.stream().sorted((c1, c2) -> c1.getFirstName().compareTo(c2.getFirstName())).collect(Collectors.toList());
     }
 
     public void sortContactsByCityOrStateOrZip() {
         System.out.println("Press 1 to sort by city ,2 to sort by state , to sort by zip code");
         int choice = sc.nextInt();
-        contactList = addressFileObj.readAddressBookFromAFile();
+        contactList = addressJsonObj.readAddressBookFromAFile();
         switch (choice) {
             case 1:
                 contactList = contactList.stream().sorted((c1, c2) -> c1.getCityName().compareTo(c2.getCityName())).collect(Collectors.toList());
